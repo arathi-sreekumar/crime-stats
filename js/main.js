@@ -1,5 +1,7 @@
 // Filename: main.js
 
+'use strict';
+
 require([
   // Load our app module and pass it to our definition function
   'application/app',

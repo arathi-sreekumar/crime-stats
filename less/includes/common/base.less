@@ -1,0 +1,56 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.231;
+    background:#FCF5EA;
+    height: 100%;
+    vertical-align: baseline;
+}
+
+header,
+footer,
+section,
+nav,
+aside,
+hgroup,
+article,
+figure,
+figcaption {
+    display: block;
+}
+
+header {
+    width: 100%;
+    clear: both;
+}
+
+footer {
+    width: 100%;
+    clear: both;
+}
+
+.container {
+    width: 100%;
+    max-width: @site-width;
+    .border-box();
+    margin: 0 auto;
+}
+
+#main {
+    min-height: 50%;
+    height: auto !important;
+    height: 100%;
+    padding: 0 @site-padding @site-padding;
+    background-color: #FFFDFA;
+    margin: @site-padding 0;
+    .box-shadow();
+}
+
+/*  MEDIA QUERIES FOR MOBILES */
+@media(max-width: 980px) {
+    .container {
+        width: 100%;
+    }
+}

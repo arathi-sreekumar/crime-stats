@@ -19,10 +19,10 @@ module.exports = function(grunt) {
             options: {
                baseUrl: 'js/',
                name: 'main',
-               mainConfigFile: 'js/application/config.js',
+               mainConfigFile: 'js/config.js',
                out: 'js/compiled/compiled.min.js',
                optimize: 'uglify2',
-               include: ['vendor/require.js']
+               include: ['libs/require.js']
             }
         }
     },
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
       files: ['js/application/**/*.js', 'Gruntfile.js',
       '!**/target/*.js', '!**/vendor/**/*.js',
       '!**/compiled.min.js', '!**/node_modules/**/*.js'
-      ]
+      ],
       options: {
         jshintrc: '.jshintrc'
       },
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
           cleancss: true
         },
         files: {
-          'css/**/*.css': [
+          'css/styles.css': [
             'less/project.less'
           ]
         }
@@ -69,51 +69,11 @@ module.exports = function(grunt) {
         files: {
           'js/scripts.min.js': [
             'js/*.js'
-            // 'js/vendor/fastclick.js',
-            // 'js/plugins/bootstrap/transition.js',
-            // 'js/plugins/bootstrap/carousel.js',
-            // 'js/_*.js'
           ]
         }
       }
     },
-    // concat: {
-    //   RMM: {
-    //     files: {
-    //       'js/script-rmm.min.js' : RMM.scripts
-    //     }
-    //   }
-    // },
-    // exec: {
-    //   RMM_init: {
-    //     cmd: 'RMM.init'
-    //   }
-    // },
 
-      // collections: {
-      //   files: {
-      //     'js/collections_all.js' : 'js/app/collection/*.js'
-      //   }
-      // },
-      // models: {
-      //   files: {
-      //     'js/models_all.js' : 'js/app/model/*.js'
-      //   }
-      // },
-      // view: {
-      //   files: {
-      //     'js/view_all.js' : 'js/app/view/*.js'
-      //   }
-      // }
-    // version: {
-    //   options: {
-    //     // file: 'lib/scripts.php',
-    //     // css: 'css/main.min.css',
-    //     // cssHandle: 'roots_main',
-    //     // js: 'js/scripts.min.js',
-    //     // jsHandle: 'roots_scripts'
-    //   }
-    // },
     watch: {
       styles: {
         files: [ 'less/*.less'],
@@ -143,9 +103,9 @@ module.exports = function(grunt) {
     },
     clean: {
       dist: [
-        // 'css/main.min.css',
-        //'js/scripts-rmm.min.js'
-        //'index2.html'
+        'css/*.css',
+        'js/compiled/*.js',
+        'index.html'
       ]
     }
   });
@@ -158,7 +118,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-contrib-jade');
+  //grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-inline');
   //grunt.loadNpmTasks('grunt-exec');
@@ -167,18 +127,16 @@ module.exports = function(grunt) {
 
   // Register tasks
   grunt.registerTask('default', [
-    //'requirejs',
+    'requirejs',
     'jshint',
-    'jade',
+    //'jade',
     'jasmine',
     'clean',
     'less',
     'inline',
-    // 'recess',
     //'uglify',
     //'exec',
     'concat'
-    // 'version'
   ]);
 
 };

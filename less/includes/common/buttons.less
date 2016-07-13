@@ -1,0 +1,60 @@
+/* =============== BUTTON styling =============== */
+.btn {
+    display: inline-block;
+    background: @btn-pri-bg;
+    height: @btn-line-height;
+    line-height: @btn-line-height;
+    vertical-align: middle;
+    font-weight: bold;
+    padding: 0px 10px;
+    border: 0;
+    border-radius: 3px;
+    color: #FFFFFF;
+
+    &:hover {
+        background-color: @btn-pri-bg-hover;
+    }
+
+    &:active {
+        background-color: @btn-pri-bg-active;
+    }
+
+    &:visited {
+        background-color: @btn-pri-bg;
+    }
+}
+.btn-wide {
+    padding: 0px 28px;
+}
+.btn-cancel {
+    background-color: @btn-cancel-bg;
+    &:hover {
+        background-color: @btn-cancel-bg-hover;
+    }
+    &:active {
+        background-color: @btn-cancel-bg-active;
+    }
+    &:visited {
+        background-color: @btn-cancel-bg;
+    }
+}
+.btn-clear,
+.btn-link {
+    background: none;
+    padding: 0;
+    color: @link-color;
+    &:hover {
+        background: none;
+    }
+    &:active,
+    &:visited {
+        background: none;
+    }
+}
+
+.btn-link {
+    color: @link-color;
+    &:hover {
+        text-decoration: underline;
+    }
+}

@@ -1,4 +1,6 @@
 // Filename: app.js
+'use strict';
+
 define([
   'jquery', 
   'underscore', 

@@ -1,8 +1,7 @@
-// Author: Thomas Davis <thomasalwyndavis@gmail.com>
-// Filename: main.js
+// Filename: config.js
 
-// Require.js allows us to configure shortcut alias
-// Their usage will become more apparent futher along in the tutorial.
+'use strict';
+
 require.config({
   deps: ["main"],
   paths: {

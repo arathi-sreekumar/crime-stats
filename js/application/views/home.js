@@ -2,6 +2,8 @@
  *
  * -> Home View
  */
+'use strict';
+
 define([
   'jquery',
   'underscore',

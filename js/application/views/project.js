@@ -1,3 +1,5 @@
+'use strict';
+
 define([
   'jquery',
   'underscore',
@@ -8,7 +10,7 @@ define([
 ], function($, _, Backbone, ProjectModel, ProjectsCollection, projectsTemplate){
 
   var ProjectsView = Backbone.View.extend({
-    el: $("#page"),
+    el: $('#page'),
     render: function(){
 
       this.$el.html(projectsTemplate);
