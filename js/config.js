@@ -9,6 +9,7 @@ require.config({
     underscore: 'libs/underscore.min',
     backbone: 'libs/backbone.min',
     handlebars: 'libs/handlebars.min',
+    jqueryui: 'libs/jqueryui',
     text : 'libs/text',
     router: 'application/router',
     templates: '../templates',
