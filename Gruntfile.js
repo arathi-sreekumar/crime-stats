@@ -4,17 +4,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     requirejs: {
-        // compile: {
-        //     options: {
-        //         baseUrl: 'js/',
-        //         name: 'main',
-        //         dir: 'js/target/',
-        //         mainConfigFile: 'js/config.js',
-        //         //out: 'js/compiled.min.js',
-        //         optimize: 'uglify2'
-        //     }
-        // }
-        /* For minification - production */
         compile: {
             options: {
                baseUrl: 'js/',
@@ -22,14 +11,14 @@ module.exports = function(grunt) {
                mainConfigFile: 'js/config.js',
                out: 'js/compiled/compiled.min.js',
                optimize: 'uglify2',
-               include: ['libs/require.js']
+               include: ['libs/require.min.js']
             }
         }
     },
     jshint: {
-      files: ['js/application/**/*.js', 'Gruntfile.js',
-      '!**/target/*.js', '!**/vendor/**/*.js',
-      '!**/compiled.min.js', '!**/node_modules/**/*.js'
+      files: ['js/application/**/*.js', 'Gruntfile.js', 'test/application/**/*.js', '!**/coverage/**/*.js',
+      '!**/target/*.js', '!**/libs/**/*.js',
+      '!js/**/compiled.min.js', '!**/node_modules/**/*.js'
       ],
       options: {
         jshintrc: '.jshintrc'
@@ -56,14 +45,11 @@ module.exports = function(grunt) {
         }
       }
     },
-    jasmine: {
-      src: ['js/Player.js', 'js/Song.js'],
-      options: {
-        specs: 'test/spec/PlayerSpec.js',
-        helpers: 'test/spec/SpecHelper.js'
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js'
       }
     },
-
     uglify: {
       dist: {
         files: {
@@ -74,38 +60,34 @@ module.exports = function(grunt) {
       }
     },
 
+    connect: {
+      server: {
+        options: {
+          keepalive: true
+        }
+      },
+      launch: {
+        options: {
+          open: true,
+          keepalive: true
+        }
+      }
+    },
+
     watch: {
       styles: {
-        files: [ 'less/*.less'],
+        files: [ 'less/**/*.less'],
         tasks: ['less']
       },
       scripts: {
         files: ['<%= jshint.files %>'],
         tasks: ['jshint']
-      },
-      jade: {
-        files: ['jade/*.jade','jade/demos/*.jade','jade/includes/**/*.jade'],
-        tasks: ['jade']
       }
-      // livereload: {
-      //   // Browser live reloading
-      //   // https://github.com/gruntjs/grunt-contrib-watch#live-reloading
-      //   options: {
-      //     livereload: false
-      //   }
-      //   // files: [
-      //   //   'css/main.min.css',
-      //   //   'js/scripts.min.js',
-      //   //   // 'templates/*.php',
-      //   //   // '*.php'
-      //   // ]
-      // }
     },
     clean: {
       dist: [
         'css/*.css',
-        'js/compiled/*.js',
-        'index.html'
+        'js/compiled/*.js'
       ]
     }
   });
@@ -116,27 +98,24 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-less');
-  //grunt.loadNpmTasks('grunt-contrib-jade');
-  grunt.loadNpmTasks('grunt-contrib-jasmine');
+  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-inline');
-  //grunt.loadNpmTasks('grunt-exec');
-  //grunt.loadNpmTasks('grunt-recess');
-  //grunt.loadNpmTasks('grunt-wp-version');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Register tasks
   grunt.registerTask('default', [
+    'clean',
     'requirejs',
     'jshint',
-    //'jade',
-    'jasmine',
-    'clean',
     'less',
-    'inline',
-    //'uglify',
-    //'exec',
-    'concat'
+    'inline'
   ]);
+
+  grunt.registerTask('start', 'connect:server');
+
+  grunt.registerTask('launch', 'connect:launch');
+
+  grunt.registerTask('test', 'karma');
 
 };
