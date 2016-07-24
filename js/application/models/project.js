@@ -4,7 +4,9 @@ define([
   'backbone'
 ], function(_, Backbone) {
   
-  var ProjectModel = Backbone.Model.extend({});
+  var ProjectModel = Backbone.Model.extend({
+
+  });
 
   return ProjectModel;
 
