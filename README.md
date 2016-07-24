@@ -1,1 +1,3 @@
-A Boiler plate for Backbone, require, handlebars, jasmine
+# crime-stats
+A small project to show crime stats
+
