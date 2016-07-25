@@ -1,7 +1,3 @@
-/**
- *
- * -> Home View
- */
 'use strict';
 
 define([
@@ -22,11 +18,10 @@ define([
     },
     
     initialize: function(){
-      this.render();
     },
 
-    render: function () {
-      $(this.el).html(this.template({postCode: 'BN11 3AT'}));
+    render: function (postCode) {
+      $(this.el).html(this.template({postCode: postCode}));
     }
 
   });

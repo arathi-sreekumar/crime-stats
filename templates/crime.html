@@ -1,0 +1,11 @@
+<h2>Crime data for {{date}} </h2>
+<table>
+  <tr>
+    <th>Crime</th><th>Count</th>
+  </tr>
+  {{#each crimeStats}}
+      <tr>
+        <td>{{@key}}</td><td>{{this}}</td>
+      </tr>
+  {{/each}}
+</table>
