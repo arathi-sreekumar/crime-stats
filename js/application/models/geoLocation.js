@@ -10,8 +10,11 @@ define([
   		return 'http://uk-postcodes.com/postcode/' + this.postCode + '.json';
   	},
 
-  	initialize: function (postCode) {
+  	setPostCode: function (postCode) {
   		this.postCode = postCode;
+  	},
+
+  	initialize: function () {
   	},
 
   	parse: function (data) {
