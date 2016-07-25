@@ -5,43 +5,59 @@ define([
   'underscore',
   'jqueryui/widgets/autocomplete',
   'backbone',
+  'handlebars',
   'models/project',
-  'collections/projects',
+  'models/geoLocation',
+  'models/crime',
+  'collections/postcode',
+  'views/googleMaps',
   'text!templates/project.html'
-], function($, _, autocomplete, Backbone, ProjectModel, ProjectsCollection, projectsTemplate){
+], function($, _, autocomplete, Backbone, hbs, ProjectModel, GeoLocationModel, CrimeModel, PostcodeCollection, MapsView, projectsTemplate){
 
   var ProjectsView = Backbone.View.extend({
     el: $('#page'),
 
+    template: hbs.compile(projectsTemplate),
+
     events: {
        'click .find' : 'getGeoLocation'
     },
-    render: function(){
 
-      this.$el.html(projectsTemplate);
+    initAutoComplete: function() {
 
-      var project0 = new ProjectModel({title: 'Cross Domain', url: 'https://github.com/thomasdavis/backbonetutorials/tree/gh-pages/examples/cross-domain'}); 
-
-      var aProjects = [project0];
-
-      var projectsCollection = new ProjectsCollection(aProjects);  
-
-      // Move this to collections
+      var postcodeCollection = new PostcodeCollection();
       this.$('#postcode').autocomplete({
         minLength: 2,
         source: function (request, response) {
-          var url = 'http://api.postcodes.io/postcodes/' + request.term + '/autocomplete';
-          $.ajax({
-            url: url,
-            success: function (data) {
+          postcodeCollection.searchTerm = request.term;
+          postcodeCollection.fetch({
+            success: function (collection, data) {
               response(data.result);
-            },
+            }
           });
+
         },
         error: function (event, ui) {
           //your error code here
         }
       });
+    },
+
+    initialize: function() {
+
+    },
+
+    render: function(){
+
+      this.$el.html(this.template());
+
+      var mapsView = new MapsView();
+      mapsView.render();
+
+      this.initAutoComplete();
+
+      // Move this to collections
+      
 
       //get lattitude and longitude from post code
       //api.zippopotam.us/GB/AB1
@@ -54,21 +70,17 @@ define([
     getGeoLocation: function (e) {
       e.preventDefault();
       var postCode = this.$('#postcode').val().replace(/\s+/, '');
-      var url = 'http://uk-postcodes.com/postcode/' + postCode + '.json';
-      $.ajax({
-          url: url,
-          success: function (data) {
-            console.log(data);
-            var date = new Date();
-            var currentYearMonth = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2);
-            var url = 'https://data.police.uk/api/crimes-street/all-crime?lat=' + data.geo.lat.toFixed(6) + '&lng=' + data.geo.lng.toFixed(6);
-            $.ajax({
-              url: url,
-              success: function (data) {
-                console.log(data);
-              }
-            });
-          }
+      var geoLocationModel = new GeoLocationModel(postCode);
+      geoLocationModel.fetch({
+        success: function (model, result) {
+          //var crimeModel = new CrimeModel();
+          var crimeModel = geoLocationModel.getCrimesModelForLocation();
+          crimeModel.fetch({
+            success: function (model, data) {
+              console.log(model, data, crimeModel.categoryData, crimeModel.during);
+            }
+          });
+        }
       });
     }
   });
