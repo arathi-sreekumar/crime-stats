@@ -40,7 +40,6 @@ define([
               response(data.result);
             }
           });
-
         },
         error: function (event, ui) {
           //your error code here
