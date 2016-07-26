@@ -18,10 +18,11 @@ define([
     },
     
     initialize: function(){
+      this.apiKey = 'AIzaSyCBUAx3W_ykWX9gSePohkLo-TRTeNV9iwI';
     },
 
     render: function (postCode) {
-      $(this.el).html(this.template({postCode: postCode}));
+      $(this.el).html(this.template({postCode: postCode, apiKey: this.apiKey}));
     }
 
   });
