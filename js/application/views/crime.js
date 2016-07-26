@@ -10,12 +10,12 @@ define([
 
   /*
    * Function to get verbose date from date
-   * @param dateString  date input in string format "yyyy-mm" eg: "2016-06"
-   * @return verboseDate   date as string in format "MMM yyyy" eg: "June 2016"
+   * @param dateString  date input in string format 'yyyy-mm' eg: '2016-06'
+   * @return verboseDate   date as string in format 'MMM yyyy' eg: 'June 2016'
   */
   function getDateVerbose(dateString) {
-    var monthNames = ["January", "February", "March", "April", "May", "June", 
-    "July", "August", "September", "October", "November", "December"];
+    var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+    'July', 'August', 'September', 'October', 'November', 'December'];
     var date = dateString.split('-');
     var month = parseInt(date[1] - 1);
     var verboseDate = monthNames[month] + ' ' + date[0];

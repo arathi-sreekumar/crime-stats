@@ -17,7 +17,7 @@ define([
   	parse: function (data) {
   		this.categoryData = _.countBy(data, 'category');
   		this.during = data[0].month;
-  		return data;
+  		return {data: data};
   	}
 
 
