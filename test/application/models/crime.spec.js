@@ -54,7 +54,7 @@ define([
         expect(this.crimeModel.categoryData).toEqual({'anti-social-behaviour': 3});
         expect(this.crimeModel.get('data').length).toEqual(mockCrimeData.length);
       });
-    })
+    });
   });
 
 });

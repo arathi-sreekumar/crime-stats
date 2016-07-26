@@ -10,6 +10,10 @@ define([
   		return 'http://uk-postcodes.com/postcode/' + this.postCode + '.json';
   	},
 
+    /*
+     * setPostCode  sets the postcode for geolocation model
+     * @param postcode  string postcode value
+    */
   	setPostCode: function (postCode) {
   		this.postCode = postCode;
   	},
@@ -18,13 +22,15 @@ define([
   	},
 
   	parse: function (data) {
-  		this.latitude = data.geo.lat.toFixed(6);
-  		this.longitude = data.geo.lng.toFixed(6);
   		return {latitude: data.geo.lat.toFixed(6), longitude: data.geo.lng.toFixed(6)};
   	},
 
+    /*
+     * getCrimesModelForLocation  creates a crime model with latitude and longitude initialized and returns it
+     * @return crimeModel   an object of crime model with its latitude and longitude values initialized
+    */
   	getCrimesModelForLocation: function() {
-  		var crimeModel = new CrimeModel(this.latitude, this.longitude);
+  		var crimeModel = new CrimeModel(this.get('latitude'), this.get('longitude'));
   		return crimeModel;
   	}
 
