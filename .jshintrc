@@ -25,6 +25,7 @@
         "Backbone": true,
         "_": true,
         "$": true,
-        "addthis": true
+        "addthis": true,
+        "google": true
     }
 }
