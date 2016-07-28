@@ -5,10 +5,11 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'views/project'
+  'views/project',
+  'views/home'
   //'views/contributors/ContributorsView',
   //'views/footer/FooterView'
-], function($, _, Backbone, ProjectsView) {
+], function($, _, Backbone, ProjectsView, HomeView) {
   //, ContributorsView, FooterView) {
   
   var AppRouter = Backbone.Router.extend({
@@ -27,13 +28,10 @@ define([
     
     app_router.on('route:showCrimeStats', function(){
         var projectsView = new ProjectsView();
-        projectsView.render();
-
     });
 
     app_router.on('route:defaultAction', function (actions) {
-        var projectsView = new ProjectsView();
-        projectsView.render();
+        var homeView = new HomeView();
     });
 
     Backbone.history.start();

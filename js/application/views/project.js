@@ -78,7 +78,9 @@ define([
         success: function (model, result) {
           //var crimeModel = new CrimeModel();
           var crimeModel = that.geoLocationModel.getCrimesModelForLocation();
-          that.crimeView.updateModel(crimeModel);
+          setTimeout(function () {
+            that.crimeView.updateModel(crimeModel);
+          }, 400);
         }
       });
     },

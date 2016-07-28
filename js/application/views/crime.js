@@ -42,6 +42,7 @@ define([
       $(this.el).html(this.template({crimeStats: crimeStats, date: date}));
       this.renderCrimeChart(crimeStats);
       this.showMap();
+      $('.data-container .loading-container').addClass('hidden');
     },
 
     /*
