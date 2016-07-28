@@ -55,7 +55,7 @@ define([
         expect(crimeModel.latitude).toBe(this.geoLocationModel.get('latitude'));
         expect(crimeModel.longitude).toBe(this.geoLocationModel.get('longitude'));
       });
-    })
+    });
 
   });
 
