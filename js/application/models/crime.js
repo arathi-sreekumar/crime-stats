@@ -60,8 +60,6 @@ define([
   		return {data: data};
   	}
 
-
-
   });
 
   return CrimeModel;

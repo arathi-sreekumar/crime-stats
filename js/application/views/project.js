@@ -6,13 +6,9 @@ define([
   'jqueryui/widgets/autocomplete',
   'backbone',
   'handlebars',
-  'models/geoLocation',
-  'models/crime',
-  'models/postcode',
-  'collections/postcode',
   'views/crime',
   'text!templates/project.html'
-], function($, _, autocomplete, Backbone, hbs, GeoLocationModel, CrimeModel, PostCodeModel, PostcodeCollection, CrimeView, projectsTemplate){
+], function($, _, autocomplete, Backbone, hbs, CrimeView, projectsTemplate){
 
   var ProjectsView = Backbone.View.extend({
     el: $('#page'),
@@ -47,12 +43,10 @@ define([
       });
     },
 
-    initialize: function() {
-      this.geoLocationModel = new GeoLocationModel();
-
-      this.postcodeCollection = new PostcodeCollection();
-
-      this.postCodeModel = new PostCodeModel();
+    initialize: function(geoLocationModel, postCodeModel, postcodeCollection) {
+      this.geoLocationModel = geoLocationModel;
+      this.postcodeCollection = postcodeCollection;
+      this.postCodeModel = postCodeModel;
 
       this.render();
       
@@ -63,6 +57,22 @@ define([
       this.$el.html(this.template(data));
       this.initAutoComplete();
       this.crimeView = new CrimeView();
+      //Hide loader when ever crime data is loaded
+      this.listenTo(this.crimeView, 'rendered', this.hideLoader);
+    },
+
+    /*
+     * Show loader display, this is currently called when a valid postcode is submitted for getting crime data
+    */
+    showLoader: function () {
+      $('.data-container .loading-container').removeClass('hidden');
+    },
+
+    /*
+     * Hide loader display, this is currently called when crimeView completes rendering
+    */
+    hideLoader: function () {
+      $('.data-container .loading-container').addClass('hidden');
     },
 
     /*
@@ -73,11 +83,14 @@ define([
     */
     getGeoLocationAndShowCrimeStats: function (postCode) {
       var that = this;
+      this.showLoader(); // We are going to get geolocation and rerender the crime view, hence show loader
       this.geoLocationModel.setPostCode(postCode);
       this.geoLocationModel.fetch({
         success: function (model, result) {
-          //var crimeModel = new CrimeModel();
           var crimeModel = that.geoLocationModel.getCrimesModelForLocation();
+          crimeModel.set('postCode', that.postCodeUntrimmed);
+
+          //Setting time out so that the loader doesnt flash, and user has time to take in that new data is loaded
           setTimeout(function () {
             that.crimeView.updateModel(crimeModel);
           }, 400);
@@ -93,9 +106,9 @@ define([
       e.preventDefault();
       //to do validate postcode
       var that = this;
-      var postCode = this.$('#postcode').val().replace(/\s+/, '');
+      this.postCodeUntrimmed = this.$('#postcode').val();
+      var postCode = this.postCodeUntrimmed.replace(/\s+/, '');
       if (postCode.length) {
-        $('.data-container .loading-container').removeClass('hidden');
         this.postCodeModel.setPostCode(postCode);
         this.postCodeModel.fetch({
           success: function (model, response) {

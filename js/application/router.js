@@ -5,11 +5,14 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'models/geoLocation',
+  'models/postcode',
+  'collections/postcode',
   'views/project',
   'views/home'
   //'views/contributors/ContributorsView',
   //'views/footer/FooterView'
-], function($, _, Backbone, ProjectsView, HomeView) {
+], function($, _, Backbone, GeoLocationModel, PostCodeModel, PostcodeCollection, ProjectsView, HomeView) {
   //, ContributorsView, FooterView) {
   
   var AppRouter = Backbone.Router.extend({
@@ -27,7 +30,10 @@ define([
     var app_router = new AppRouter();
     
     app_router.on('route:showCrimeStats', function(){
-        var projectsView = new ProjectsView();
+      var geoLocationModel = new GeoLocationModel();
+      var postcodeCollection = new PostcodeCollection();
+      var postCodeModel = new PostCodeModel();
+      var projectsView = new ProjectsView(geoLocationModel, postCodeModel, postcodeCollection);
     });
 
     app_router.on('route:defaultAction', function (actions) {

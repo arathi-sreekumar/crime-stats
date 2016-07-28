@@ -93,10 +93,10 @@ define([
     },
 
     render: function (crimeStats, date) {
-      $(this.el).html(this.template({crimeStats: crimeStats, date: date}));
+      $(this.el).html(this.template({crimeStats: crimeStats, date: date, postCode: this.model.get('postCode')}));
       this.renderCrimeChart(crimeStats);
       this.showMap();
-      $('.data-container .loading-container').addClass('hidden');
+      this.trigger('rendered');
     },
 
     /*
