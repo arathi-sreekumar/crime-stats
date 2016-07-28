@@ -94,17 +94,20 @@ define([
       //to do validate postcode
       var that = this;
       var postCode = this.$('#postcode').val().replace(/\s+/, '');
-      this.postCodeModel.setPostCode(postCode);
-      this.postCodeModel.fetch({
-        success: function (model, response) {
-          if (response.result) {
-            $('.error').addClass('hide');
-            that.getGeoLocationAndShowCrimeStats(postCode);
-          } else {
-            $('.error').removeClass('hide');
+      if (postCode.length) {
+        $('.data-container .loading-container').removeClass('hidden');
+        this.postCodeModel.setPostCode(postCode);
+        this.postCodeModel.fetch({
+          success: function (model, response) {
+            if (response.result) {
+              $('.error').addClass('hide');
+              that.getGeoLocationAndShowCrimeStats(postCode);
+            } else {
+              $('.error').removeClass('hide');
+            }
           }
-        }
-      });
+        });
+      }
     }
   });
 

@@ -11,6 +11,7 @@ define([
   'text!templates/crime.html'
 ], function($, _, Backbone, hbs, Chartist, ChartistTooltip, MapsView, crimeStatsTemplate){
 
+  //Private functions
   /*
    * Function to get verbose date from date
    * @param dateString  date input in string format 'yyyy-mm' eg: '2016-06'
@@ -23,6 +24,59 @@ define([
     var month = parseInt(date[1] - 1);
     var verboseDate = monthNames[month] + ' ' + date[0];
     return verboseDate;
+  }
+
+  /*
+     * Draw bar chart
+     * @param crimeStats  the crime data for the chart
+     * @return chart  chart object of the bar chart drawn
+    */
+  function drawCrimeChart(crimeStats, categoryColours) {
+    var labels = [], values = [];
+
+    _.each(crimeStats, function (value, key, list) {
+      labels.push(key);
+      values.push(value);
+    });
+
+    var chart = new Chartist.Bar('.ct-chart', {
+      labels: labels,
+      series: [values]
+    }, {
+      seriesBarDistance: 5,
+      reverseData: true,
+      horizontalBars: true,
+      axisY: {
+        offset: 70
+      },
+      plugins: [
+        Chartist.plugins.tooltip()
+      ]
+    });
+
+    setBarColours(chart, categoryColours);
+
+    return chart;
+  }
+
+  /*
+   * Colour the bars based on the category
+   * @param chart  chart object of the bar chart drawn
+   * @param categoryColours  map of colours for each category
+   * @return chart  chart object of the bar chart drawn
+  */
+  function setBarColours(chart, categoryColours) {
+    chart.on('draw', function(context) {
+      // First we want to make sure that only do something when the draw event is for bars. Draw events do get fired for labels and grids too.
+      if(context.type === 'bar') {
+        var category = context.axisY.options.ticks[context.index];
+        context.element.attr({
+          // Now we set the style attribute on our bar to override the default color of the bar.
+          style: 'stroke: #' + categoryColours[category] + ';'
+        });
+      }
+    });
+    return chart;
   }
 
   var CrimeView = Backbone.View.extend({
@@ -58,39 +112,9 @@ define([
      * @param: crimeStats  the crime data
     */
     renderCrimeChart: function (crimeStats) {
-      var labels = [], values = [], that = this;
-
-      _.each(crimeStats, function (value, key, list) {
-        labels.push(key);
-        values.push(value);
-      });
-
-      var chart = new Chartist.Bar('.ct-chart', {
-        labels: labels,
-        series: [values]
-      }, {
-        seriesBarDistance: 5,
-        reverseData: true,
-        horizontalBars: true,
-        axisY: {
-          offset: 70
-        },
-        plugins: [
-          Chartist.plugins.tooltip()
-        ]
-      });
-
-      chart.on('draw', function(context) {
-        // First we want to make sure that only do something when the draw event is for bars. Draw events do get fired for labels and grids too.
-        if(context.type === 'bar') {
-          var category = context.axisY.options.ticks[context.index];
-          context.element.attr({
-            // Now we set the style attribute on our bar to override the default color of the bar.
-            style: 'stroke: #' + that.model.categoryColours[category] + ';'
-          });
-        }
-      });
+      drawCrimeChart(crimeStats, this.model.categoryColours);
     },
+
 
     /*
      * Updatemodel function, updates the view model with the input model
