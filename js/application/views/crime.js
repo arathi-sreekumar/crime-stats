@@ -5,8 +5,11 @@ define([
   'underscore',
   'backbone',
   'handlebars',
+  'chartist',
+  'chartistTooltip',
+  'views/googleMaps',
   'text!templates/crime.html'
-], function($, _, Backbone, hbs, crimeStatsTemplate){
+], function($, _, Backbone, hbs, Chartist, ChartistTooltip, MapsView, crimeStatsTemplate){
 
   /*
    * Function to get verbose date from date
@@ -22,7 +25,7 @@ define([
     return verboseDate;
   }
 
-  var GoogleMapsView = Backbone.View.extend({
+  var CrimeView = Backbone.View.extend({
 
     el: '#crime-stats',
 
@@ -32,10 +35,60 @@ define([
     },
     
     initialize: function(){
+      this.mapsView = new MapsView();
     },
 
     render: function (crimeStats, date) {
       $(this.el).html(this.template({crimeStats: crimeStats, date: date}));
+      this.renderCrimeChart(crimeStats);
+      this.showMap();
+    },
+
+    /*
+     * show map function renders the map
+     * @param postCode  the postcode to display the map for
+    */
+    showMap: function () {
+      this.mapsView.render(this.model.crimeLocationData, this.model.latitude, this.model.longitude);
+    },
+
+    /*
+     * Render crime data as a horizontal bar chart
+     * @param: crimeStats  the crime data
+    */
+    renderCrimeChart: function (crimeStats) {
+      var labels = [], values = [], that = this;
+
+      _.each(crimeStats, function (value, key, list) {
+        labels.push(key);
+        values.push(value);
+      });
+
+      var chart = new Chartist.Bar('.ct-chart', {
+        labels: labels,
+        series: [values]
+      }, {
+        seriesBarDistance: 5,
+        reverseData: true,
+        horizontalBars: true,
+        axisY: {
+          offset: 70
+        },
+        plugins: [
+          Chartist.plugins.tooltip()
+        ]
+      });
+
+      chart.on('draw', function(context) {
+        // First we want to make sure that only do something when the draw event is for bars. Draw events do get fired for labels and grids too.
+        if(context.type === 'bar') {
+          var category = context.axisY.options.ticks[context.index];
+          context.element.attr({
+            // Now we set the style attribute on our bar to override the default color of the bar.
+            style: 'stroke: #' + that.model.categoryColours[category] + ';'
+          });
+        }
+      });
     },
 
     /*
@@ -49,11 +102,11 @@ define([
       model.fetch({
         success: function (model, data) {
           var date = getDateVerbose(model.during);
-          that.render(model.categoryData, date);
+          that.render(model.categoryData, date, model.crimeLocationData);
         }
       });
     }
 
   });
-  return GoogleMapsView;
+  return CrimeView;
 });
