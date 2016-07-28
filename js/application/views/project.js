@@ -8,11 +8,11 @@ define([
   'handlebars',
   'models/geoLocation',
   'models/crime',
+  'models/postcode',
   'collections/postcode',
-  'views/googleMaps',
   'views/crime',
   'text!templates/project.html'
-], function($, _, autocomplete, Backbone, hbs, GeoLocationModel, CrimeModel, PostcodeCollection, MapsView, CrimeView, projectsTemplate){
+], function($, _, autocomplete, Backbone, hbs, GeoLocationModel, CrimeModel, PostCodeModel, PostcodeCollection, CrimeView, projectsTemplate){
 
   var ProjectsView = Backbone.View.extend({
     el: $('#page'),
@@ -20,7 +20,7 @@ define([
     template: hbs.compile(projectsTemplate),
 
     events: {
-       'click .find' : 'displayCrimeDataAndMap'
+       'click .find' : 'validateAndDisplayCrimeDataAndMap'
     },
 
     /*
@@ -30,12 +30,12 @@ define([
     */
     initAutoComplete: function() {
 
-      var postcodeCollection = new PostcodeCollection();
+      var that = this;
       this.$('#postcode').autocomplete({
         minLength: 2,
         source: function (request, response) {
-          postcodeCollection.searchTerm = request.term;
-          postcodeCollection.fetch({
+          that.postcodeCollection.searchTerm = request.term;
+          that.postcodeCollection.fetch({
             success: function (collection, data) {
               response(data.result);
             }
@@ -49,26 +49,20 @@ define([
 
     initialize: function() {
       this.geoLocationModel = new GeoLocationModel();
+
+      this.postcodeCollection = new PostcodeCollection();
+
+      this.postCodeModel = new PostCodeModel();
+
+      this.render();
+      
     },
 
-    render: function(){
-
-      this.$el.html(this.template());
-
-      this.mapsView = new MapsView();
-
-      this.crimeView = new CrimeView();
-
+    render: function(data){
+      data = data || {};
+      this.$el.html(this.template(data));
       this.initAutoComplete();
-
-    },
-
-    /*
-     * show map function renders the map
-     * @param postCode  the postcode to display the map for
-    */
-    showMap: function (postCode) {
-      this.mapsView.render(postCode);
+      this.crimeView = new CrimeView();
     },
 
     /*
@@ -90,14 +84,25 @@ define([
     },
 
     /*
-     * Display crime data and map for given postcode
+     * Display crime data and map for given postcode if valid postcode
      * e event object  clicked event object 
     */
-    displayCrimeDataAndMap: function(e) {
+    validateAndDisplayCrimeDataAndMap: function(e) {
       e.preventDefault();
+      //to do validate postcode
+      var that = this;
       var postCode = this.$('#postcode').val().replace(/\s+/, '');
-      this.showMap(postCode);
-      this.getGeoLocationAndShowCrimeStats(postCode);
+      this.postCodeModel.setPostCode(postCode);
+      this.postCodeModel.fetch({
+        success: function (model, response) {
+          if (response.result) {
+            $('.error').addClass('hide');
+            that.getGeoLocationAndShowCrimeStats(postCode);
+          } else {
+            $('.error').removeClass('hide');
+          }
+        }
+      });
     }
   });
 

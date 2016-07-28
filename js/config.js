@@ -15,7 +15,9 @@ require.config({
     templates: '../templates',
     views: 'application/views',
     models: 'application/models',
-    collections: 'application/collections'
+    collections: 'application/collections',
+    chartist: 'libs/chartist.min',
+    chartistTooltip: 'libs/chartist-tooltip.min'
   },
   shim: {
     underscore: {
