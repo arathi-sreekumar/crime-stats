@@ -110,9 +110,10 @@ define([
     /*
      * Render crime data as a horizontal bar chart
      * @param: crimeStats  the crime data
+     * @return  chart object of the chart thats drawn
     */
     renderCrimeChart: function (crimeStats) {
-      drawCrimeChart(crimeStats, this.model.categoryColours);
+      return drawCrimeChart(crimeStats, this.model.categoryColours);
     },
 
 
@@ -127,7 +128,7 @@ define([
       model.fetch({
         success: function (model, data) {
           var date = getDateVerbose(model.during);
-          that.render(model.categoryData, date, model.crimeLocationData);
+          that.render(model.categoryData, date);
         }
       });
     }

@@ -43,6 +43,12 @@ define([
       });
     },
 
+    /*
+     * Initializes the project view
+     * @param geoLocationModel  instance of GeoLocationModel received from router
+     * @param postCodeModel instance of PostCodeModel received from router
+     * @param postcodeCollection instance of PostcodeCollection received from router
+    */
     initialize: function(geoLocationModel, postCodeModel, postcodeCollection) {
       this.geoLocationModel = geoLocationModel;
       this.postcodeCollection = postcodeCollection;
@@ -52,6 +58,10 @@ define([
       
     },
 
+    /*
+     * render function
+     * @param data  optional data that can be passed on to the template
+    */
     render: function(data){
       data = data || {};
       this.$el.html(this.template(data));
@@ -104,7 +114,7 @@ define([
     */
     validateAndDisplayCrimeDataAndMap: function(e) {
       e.preventDefault();
-      //to do validate postcode
+
       var that = this;
       this.postCodeUntrimmed = this.$('#postcode').val();
       var postCode = this.postCodeUntrimmed.replace(/\s+/, '');
