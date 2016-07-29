@@ -16,7 +16,7 @@ define([
     template: hbs.compile(projectsTemplate),
 
     events: {
-       'click .find' : 'validateAndDisplayCrimeDataAndMap'
+       'submit #crime-search': 'validateAndDisplayCrimeDataAndMap'
     },
 
     /*
