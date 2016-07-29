@@ -11,7 +11,7 @@ define([
 ], function($, _, autocomplete, Backbone, hbs, CrimeView, projectsTemplate){
 
   var ProjectsView = Backbone.View.extend({
-    el: $('#page'),
+    el: '#page',
 
     template: hbs.compile(projectsTemplate),
 

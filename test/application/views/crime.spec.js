@@ -33,12 +33,6 @@ define([
         expect(this.crimeView.el).toBeDefined();
       });
 
-      it('should render data provided', function () {
-        this.crimeView.render({'testing': 3}, 'May 2016');
-        expect($(this.crimeView.el).find('h2').text()).toContain('May 2016');
-        expect($(this.crimeView.el).find('table').text()).toContain('testing');
-      });
-
       describe('updating model and rendering view', function () {
         beforeEach(function () {
           this.server = sinon.fakeServer.create();
@@ -52,11 +46,22 @@ define([
         });
 
         it('updates model and renders data', function () {
+          this.crimeModel.set('postCode', 'BN1 1UE');
           this.crimeView.updateModel(this.crimeModel);
           this.server.respond();
           expect(this.crimeView.model).toEqual(this.crimeModel);
           expect($(this.crimeView.el).find('h2').text()).toContain('May 2016');
-          expect($(this.crimeView.el).find('table').text()).toContain('anti-social-behaviour');
+          expect($(this.crimeView.el).find('h2').text()).toContain('BN1 1UE');
+        });
+
+        it(' renders chart ', function () {
+          this.crimeModel.set('postCode', 'BN1 1UE');
+          this.crimeView.updateModel(this.crimeModel);
+          this.server.respond();
+          var chart = this.crimeView.renderCrimeChart(this.crimeView.model.categoryData);
+          expect(chart).toBeDefined();
+          expect(chart.data.labels[0]).toBe('anti-social-behaviour');
+          expect(chart.data.series[0][0]).toBe(3);
         });
 
         afterEach(function () {

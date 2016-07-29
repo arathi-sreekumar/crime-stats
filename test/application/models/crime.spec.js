@@ -36,6 +36,7 @@ define([
         this.latitude = 50.823692;
         this.longitude = -0.138155;
         this.crimeModel = new CrimeModel(this.latitude, this.longitude);
+        this.crimeModel.set('postCode', 'BN1 1UE');
         this.server.respondWith('GET', 'https://data.police.uk/api/crimes-street/all-crime?lat=' + this.latitude + '&lng=' + this.longitude,
           [ 200, { 'Content-Type': 'application/json' },
           JSON.stringify(mockCrimeData)
@@ -53,6 +54,8 @@ define([
         expect(this.crimeModel.during).toBe('2016-05');
         expect(this.crimeModel.categoryData).toEqual({'anti-social-behaviour': 3});
         expect(this.crimeModel.get('data').length).toEqual(mockCrimeData.length);
+        expect(this.crimeModel.categoryColours).toBeDefined();
+        expect(this.crimeModel.get('postCode')).toBe('BN1 1UE');
       });
     });
   });
