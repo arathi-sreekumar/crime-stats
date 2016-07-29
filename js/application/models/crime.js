@@ -54,7 +54,7 @@ define([
       this.setCategoryColours();
   		this.during = data[0].month;
       this.crimeLocationData = _.map(data, function(item, index) {
-        var label = item.category + ',' + item.location.street.name;
+        var label = item.category + ', ' + item.location.street.name;
         return [label, item.location.latitude, item.location.longitude, index + 1, that.categoryColours[item.category]];
       });
   		return {data: data};
