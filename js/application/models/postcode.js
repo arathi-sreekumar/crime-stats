@@ -12,7 +12,7 @@ define([
      * Response json structure: { "status": 200, "result": false }
     */
   	url: function () {
-  		return 'http://api.postcodes.io/postcodes/' + this.postcode + '/validate';
+  		return 'https://api.postcodes.io/postcodes/' + this.postcode + '/validate';
   	},
 
   	initialize: function () {
