@@ -7,7 +7,7 @@ define([
   
   var PostCodeModel = Backbone.Model.extend({
   	url: function () {
-  		return 'https://uk-postcodes.com/postcode/' + this.postCode + '.json';
+  		return 'http://uk-postcodes.com/postcode/' + this.postCode + '.json';
   	},
 
     /*
