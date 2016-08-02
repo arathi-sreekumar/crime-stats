@@ -8,7 +8,7 @@ define([
   var PostCodeCollection = Backbone.Collection.extend({
 
     url: function () {
-      return 'http://api.postcodes.io/postcodes/' + this.searchTerm + '/autocomplete';
+      return 'https://api.postcodes.io/postcodes/' + this.searchTerm + '/autocomplete';
     },
 
     model: PostCodeModel,
